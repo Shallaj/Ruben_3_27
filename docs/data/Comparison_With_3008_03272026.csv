@@ -1,0 +1,7 @@
+"Outcome","Model","Topcon_N","Baseline_3008_N","Topcon_Cases","Baseline_3008_Cases","Topcon_Controls","Baseline_3008_Controls","Topcon_AUC","Baseline_3008_AUC","AUC_Diff","Topcon_AUPRC","Baseline_3008_AUPRC","AUPRC_Diff","Topcon_Sens90","Baseline_3008_Sens90","Sens90_Diff","Topcon_Sens95","Baseline_3008_Sens95","Sens95_Diff"
+"Glaucoma+Suspect vs Healthy","Fundus",1604,1639,369,376,1235,1263,0.7593,0.5796,0.1798,0.522,0.298,0.224,0.388,0.13,0.258,0.287,0.104,0.183
+"Glaucoma+Suspect vs Healthy","RNFL+Circle",1604,1639,369,376,1235,1263,0.9376,0.9328,0.0048,0.85,0.827,0.023,0.827,0.806,0.021,0.721,0.678,0.043
+"Glaucoma+Suspect vs Healthy","RNFL+Circle+Fundus",1604,1639,369,376,1235,1263,0.9393,0.931,0.0083,0.856,0.845,0.011,0.84,0.819,0.021,0.732,0.766,-0.034
+"Glaucoma vs Suspect+Healthy","Fundus",974,1639,49,282,925,1357,0.6926,0.6209,0.0716,0.206,0.269,-0.063,0.388,0.17,0.218,0.265,0.131,0.134
+"Glaucoma vs Suspect+Healthy","RNFL+Circle",974,1639,49,282,925,1357,0.9138,0.9575,-0.0438,0.465,0.828,-0.363,0.735,0.89,-0.155,0.612,0.752,-0.14
+"Glaucoma vs Suspect+Healthy","RNFL+Circle+Fundus",974,1639,49,282,925,1357,0.9047,0.9621,-0.0574,0.493,0.839,-0.346,0.673,0.911,-0.238,0.551,0.809,-0.258

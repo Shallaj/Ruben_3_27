@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CDC Topcon Models Explorer | GitHub Pages</title>
+    <meta
+      name="description"
+      content="Static GitHub Pages recreation of the CDC Topcon Models Explorer for Ruben_3_27."
+    >
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Newsreader:opsz,wght@6..72,500;6..72,700&display=swap"
+      rel="stylesheet"
+    >
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    >
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/tabulator-tables@6.2.5/dist/css/tabulator.min.css"
+    >
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div id="loading-state" class="loading-state">
+      <div class="loading-spinner"></div>
+      <p>Loading static data bundle...</p>
+    </div>
+
+    <div id="error-banner" class="error-banner is-hidden"></div>
+
+    <div id="app-shell" class="app-shell is-hidden">
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <p class="eyebrow">GitHub Pages Edition</p>
+          <h1>CDC Topcon Models Explorer</h1>
+          <p class="sidebar-intro">
+            Dynamic client-side rebuild of the March 27, 2026 Topcon refresh
+            analysis for the Ruben_3_27 project.
+          </p>
+          <button id="sidebar-toggle" class="sidebar-toggle" type="button" aria-label="Toggle navigation">
+            <i class="bi bi-list"></i>
+          </button>
+        </div>
+
+        <nav class="tab-nav" aria-label="Primary">
+          <button class="tab-link is-active" data-tab="summary" type="button"><i class="bi bi-speedometer2"></i> Summary Dashboard</button>
+          <button class="tab-link" data-tab="roc" type="button"><i class="bi bi-graph-up"></i> ROC Curves</button>
+          <button class="tab-link" data-tab="forest" type="button"><i class="bi bi-diagram-3"></i> Forest Plots (AUC)</button>
+          <button class="tab-link" data-tab="demographics" type="button"><i class="bi bi-people"></i> Demographics</button>
+          <button class="tab-link" data-tab="clinical" type="button"><i class="bi bi-heart-pulse"></i> Clinical Measures</button>
+          <button class="tab-link" data-tab="domain" type="button"><i class="bi bi-layers"></i> Domain Performance</button>
+          <button class="tab-link" data-tab="domain-specific" type="button"><i class="bi bi-hospital"></i> Domain-Specific Analysis</button>
+          <button class="tab-link" data-tab="stratified" type="button"><i class="bi bi-funnel"></i> Stratified Performance</button>
+          <button class="tab-link" data-tab="auc-comparisons" type="button"><i class="bi bi-arrows-angle-expand"></i> AUC Comparisons</button>
+          <button class="tab-link" data-tab="confusion" type="button"><i class="bi bi-table"></i> Confusion Matrices</button>
+          <button class="tab-link" data-tab="threshold" type="button"><i class="bi bi-sliders"></i> Threshold Explorer</button>
+          <button class="tab-link" data-tab="baseline" type="button"><i class="bi bi-arrow-left-right"></i> Baseline Comparison</button>
+          <button class="tab-link" data-tab="about" type="button"><i class="bi bi-info-circle"></i> About</button>
+        </nav>
+
+        <div class="sidebar-meta">
+          <div class="meta-row">
+            <span>Analysis Date</span>
+            <strong id="meta-analysis-date">March 27, 2026</strong>
+          </div>
+          <div class="meta-row">
+            <span>Total Samples</span>
+            <strong id="meta-total-samples">-</strong>
+          </div>
+          <div class="meta-row">
+            <span>Cases</span>
+            <strong id="meta-total-cases">-</strong>
+          </div>
+          <div class="meta-row">
+            <span>Controls</span>
+            <strong id="meta-total-controls">-</strong>
+          </div>
+        </div>
+      </aside>
+
+      <main class="content">
+        <header class="hero-bar">
+          <div>
+            <p class="eyebrow">Static, Dynamic, Deployable</p>
+            <h2>Ruben_3_27 GitHub Pages Prototype</h2>
+            <p>
+              This site reproduces the current Shiny app using browser-side
+              rendering only. Charts, filters, tables, and threshold analysis all
+              run from the CSV result bundle in <code>docs/data</code>.
+            </p>
+          </div>
+          <div class="hero-actions">
+            <a class="secondary-btn" href="data/Comparison_With_3008_03272026.csv" download>Download Baseline CSV</a>
+            <a class="secondary-btn" href="README.md">Deployment Notes</a>
+          </div>
+        </header>
+
+        <section class="tab-panel is-active" data-tab-panel="summary">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Overview</p>
+              <h3>Summary Dashboard</h3>
+            </div>
+          </div>
+
+          <div class="metric-grid">
+            <article class="metric-card metric-card--green">
+              <span class="metric-label">Best Overall AUC</span>
+              <strong id="summary-best-overall-value">-</strong>
+              <p id="summary-best-overall-label">-</p>
+            </article>
+            <article class="metric-card metric-card--blue">
+              <span class="metric-label">Best Unimodal</span>
+              <strong id="summary-best-unimodal-value">-</strong>
+              <p id="summary-best-unimodal-label">-</p>
+            </article>
+            <article class="metric-card metric-card--purple">
+              <span class="metric-label">Best Multimodal</span>
+              <strong id="summary-best-multimodal-value">-</strong>
+              <p id="summary-best-multimodal-label">-</p>
+            </article>
+          </div>
+
+          <div class="panel-grid panel-grid--wide">
+            <article class="panel-card panel-card--chart">
+              <div class="panel-card__header">
+                <div>
+                  <h4>ROC Curves: Top Models</h4>
+                  <p>Glaucoma+Suspect vs Healthy</p>
+                </div>
+                <button id="summary-download-plot" class="ghost-btn" type="button" data-plot-id="summary-roc-plot">Download Plot</button>
+              </div>
+              <div id="summary-roc-plot" class="plot-slot"></div>
+            </article>
+
+            <article class="panel-card">
+              <div class="panel-card__header">
+                <div>
+                  <h4>Quick Statistics</h4>
+                  <p>Cohort and sample distribution</p>
+                </div>
+              </div>
+              <div class="stat-stack" id="summary-quick-stats"></div>
+            </article>
+          </div>
+
+          <div class="panel-grid">
+            <article class="panel-card">
+              <div class="panel-card__header">
+                <div>
+                  <h4>Top Models by AUC</h4>
+                  <p>Primary outcome ranking</p>
+                </div>
+                <button id="summary-download-data" class="ghost-btn" type="button">Download CSV</button>
+              </div>
+              <div id="summary-top-models-table" class="table-slot"></div>
+            </article>
+
+            <article class="panel-card">
+              <div class="panel-card__header">
+                <div>
+                  <h4>Sensitivity at 95% Specificity</h4>
+                  <p>Clinical threshold summary</p>
+                </div>
+              </div>
+              <div id="summary-sensitivity-table" class="table-slot"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="tab-panel" data-tab-panel="roc">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Interactive</p>
+              <h3>ROC Curves</h3>
+            </div>
+          </div>
+
+          <div class="content-grid">
+            <aside class="control-card">
+              <h4>Filters</h4>
+              <label class="field">
+                <span>Domain</span>
+                <select id="roc-domain"></select>
+              </label>
+              <label class="field">
+                <span>Outcome</span>
+                <select id="roc-outcome"></select>
+              </label>
+              <fieldset class="field fieldset">
+                <legend>Model Type</legend>
+                <label><input type="radio" name="roc-model-type" value="Both" checked> Both</label>
+                <label><input type="radio" name="roc-model-type" value="Unimodal"> Unimodal</label>
+                <label><input type="radio" name="roc-model-type" value="Multimodal"> Multimodal</label>
+              </fieldset>
+              <div class="field">
+                <span>Select Models</span>
+                <div id="roc-models" class="checkbox-list"></div>
+              </div>
+              <div class="button-row">
+                <button id="roc-select-all" class="secondary-btn secondary-btn--small" type="button">Select All</button>
+                <button id="roc-deselect-all" class="secondary-btn secondary-btn--small" type="button">Clear</button>
+              </div>
+              <div class="button-stack">
+                <button id="roc-download-plot" class="primary-btn" type="button" data-plot-id="roc-plot">Download Plot</button>
+                <button id="roc-download-data" class="secondary-btn" type="button">Download Data</button>
+              </div>
+            </aside>
+
+            <div class="content-column">
+              <article class="panel-card panel-card--chart">
+                <div class="panel-card__header">
+                  <div>
+                    <h4>ROC Curves</h4>
+                    <p>Selected model comparison</p>
+                  </div>
+                </div>
+                <div id="roc-plot" class="plot-slot plot-slot--tall"></div>
+              </article>
+
+              <article class="panel-card">
+                <div class="panel-card__header">
+                  <div>
+                    <h4>AUC Values for Selected Models</h4>
+                    <p>Current domain and outcome</p>
+                  </div>
+                </div>
+                <div id="roc-auc-table" class="table-slot"></div>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="tab-panel" data-tab-panel="forest">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Confidence Intervals</p>
+              <h3>Forest Plots (AUC)</h3>
+            </div>
+          </div>
+
+          <div class="content-grid">
+            <aside class="control-card">
+              <h4>Options</h4>
+              <label class="field">
+                <span>Domain</span>
+                <select id="forest-domain"></select>
+              </label>
+              <label class="field">
+                <span>Outcome</span>
+                <select id="forest-outcome"></select>
+              </label>
+              <fieldset class="field fieldset">
+                <legend>Model Type</legend>
+                <label><input type="radio" name="forest-model-type" value="All" checked> All</label>
+                <label><input type="radio" name="forest-model-type" value="Unimodal"> Unimodal</label>
+                <label><input type="radio" name="forest-model-type" value="Multimodal"> Multimodal</label>
+              </fieldset>
+              <label class="field field--inline">
+                <input id="forest-sort" type="checkbox" checked>
+                <span>Sort by AUC</span>
+              </label>
+              <div class="button-stack">
+                <button id="forest-download-plot" class="primary-btn" type="button" data-plot-id="forest-plot">Download Plot</button>
+                <button id="forest-download-data" class="secondary-btn" type="button">Download Data</button>
+              </div>
+            </aside>
+
+            <div class="content-column">
+              <article class="panel-card panel-card--chart">
+                <div class="panel-card__header">
+                  <div>
+                    <h4>Forest Plot</h4>
+                    <p>AUC with 95% confidence intervals</p>
+                  </div>
+                </div>
+                <div id="forest-plot" class="plot-slot"></div>
+              </article>
+              <article class="panel-card">
+                <div class="panel-card__header">
+                  <div>
+                    <h4>AUC Summary Table</h4>
+                    <p>Current forest plot subset</p>
+                  </div>
+                </div>
+                <div id="forest-table" class="table-slot"></div>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="tab-panel" data-tab-panel="demographics">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Study Population</p>
+              <h3>Demographics</h3>
+            </div>
+          </div>
+
+          <div class="panel-grid">
+            <article class="panel-card">
+              <div class="panel-card__header">
+                <div>
+                  <h4>Overall Demographics</h4>
+                  <p>Summary counts and age statistics</p>
+                </div>
+                <button id="demographics-download-overall" class="ghost-btn" type="button">Download</button>
+              </div>
+              <div id="demographics-overall-table" class="table-slot"></div>
+            </article>
+
+            <article class="panel-card">
+              <div class="panel-card__header">
+                <div>
+                  <h4>Demographics by Domain</h4>
+                  <p>AL-SIGHT, Hood, and overall</p>
+                </div>
+                <button id="demographics-download-domain" class="ghost-btn" type="button">Download</button>
+              </div>
+              <div id="demographics-domain-table" class="table-slot"></div>
+            </article>
+
+            <article class="panel-card panel-card--full">
+              <div class="panel-card__header">
+                <div>
+                  <h4>Demographics by Case/Control</h4>
+                  <p>Case-control breakdown</p>
+                </div>
+                <button id="demographics-download-case" class="ghost-btn" type="button">Download</button>
+              </div>
+              <div id="demographics-case-table" class="table-slot"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="tab-panel" data-tab-panel="clinical">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">AL-SIGHT Measures</p>
+              <h3>Clinical Measures</h3>
+            </div>
+          </div>
+
+          <div class="panel-grid">
+            <article class="panel-card">
+              <div class="panel-card__header">
+                <div>
+                  <h4>Clinical Measures Summary</h4>
+                  <p>AL-SIGHT only</p>
+                </div>
+                <button id="clinical-download-summary" class="ghost-btn" type="button">Download</button>
+              </div>
+              <div id="clinical-summary-table" class="table-slot"></div>
+            </article>
+
+            <article class="panel-card">
+              <div class="panel-card__header">
+                <div>
+                  <h4>Clinical Measures by Strata</h4>
+                  <p>Filter by stratification group</p>
+                </div>
+                <div class="inline-field">
+                  <label class="field field--compact">
+                    <span>Stratification</span>
+                    <select id="clinical-stratification"></select>
+                  </label>
+                  <button id="clinical-download-strata" class="ghost-btn" type="button">Download</button>
+                </div>
+              </div>
+              <div id="clinical-strata-table" class="table-slot"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="tab-panel" data-tab-panel="domain">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Cross-Cohort</p>
+              <h3>Domain Performance</h3>
+            </div>
+          </div>
+
+          <div class="content-grid">
+            <aside class="control-card">
+              <h4>Filters</h4>
+              <label class="field">
+                <span>Domain</span>
+                <select id="domain-filter"></select>
+              </label>
+              <label class="field">
+                <span>Outcome</span>
+                <select id="domain-outcome"></select>
+              </label>
+              <fieldset class="field fieldset">
+                <legend>Model Type</legend>
+                <label><input type="radio" name="domain-model-type" value="Unimodal" checked> Unimodal</label>
+                <label><input type="radio" name="domain-model-type" value="Multimodal"> Multimodal</label>
+              </fieldset>
+              <div class="button-stack">
+                <button id="domain-download-plot" class="primary-btn" type="button" data-plot-id="domain-plot">Download Plot</button>
+                <button id="domain-download-data" class="secondary-btn" type="button">Download Data</button>
+              </div>
+            </aside>
+
+            <div class="content-column">
+              <article class="panel-card panel-card--chart">
+                <div class="panel-card__header">
+                  <div>
+                    <h4>Performance by Cohort</h4>
+                    <p>AL-SIGHT vs Hood</p>
+                  </div>
+                </div>
+                <div id="domain-plot" class="plot-slot"></div>
+              </article>
+
+              <article class="panel-card">
+                <div class="panel-card__header">
+                  <div>
+                    <h4>Domain Performance Table</h4>
+                    <p>Current selection</p>
+                  </div>
+                </div>
+                <div id="domain-table" class="table-slot"></div>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="tab-panel" data-tab-panel="domain-specific">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Separate Cohort Analyses</p>
+              <h3>Domain-Specific Comprehensive Analysis</h3>
+              <p class="section-copy">Complete analyses run separately for AL-SIGHT and Hood.</p>
+            </div>
+          </div>
+
+          <div class="content-grid">
+            <aside class="control-card">
+              <h4>Filters</h4>
+              <label class="field">
+                <span>Cohort</span>
+                <select id="ds-domain"></select>
+              </label>
+              <label class="field">
+                <span>Outcome</span>
+                <select id="ds-outcome"></select>
+              </label>
+              <fieldset class="field fieldset">
+                <legend>Model Type</legend>
+                <label><input type="radio" name="ds-model-type" value="All" checked> All</label>
+                <label><input type="radio" name="ds-model-type" value="Unimodal"> Unimodal</label>
+                <label><input type="radio" name="ds-model-type" value="Multimodal"> Multimodal</label>
+              </fieldset>
+              <label class="field">
+                <span>Stratum</span>
+                <select id="ds-stratum"></select>
+              </label>
+              <div class="button-stack">
+                <button id="ds-download-data" class="secondary-btn" type="button">Download Filtered Data</button>
+                <button id="ds-download-plot" class="primary-btn" type="button" data-plot-id="ds-auc-plot">Download Plot</button>
+              </div>
+            </aside>
+
+            <div class="content-column">
+              <article class="panel-card panel-card--chart">
+                <div class="panel-card__header">
+                  <div>
+                    <h4>Overall Performance</h4>
+                    <p>Domain-specific AUC with confidence intervals</p>
+                  </div>
+                </div>
+                <div id="ds-auc-plot" class="plot-slot"></div>
+              </article>
+
+              <div class="panel-grid">
+                <article class="panel-card">
+                  <div class="panel-card__header">
+                    <div>
+                      <h4>Performance Table</h4>
+                      <p>Filtered by cohort and outcome</p>
+                    </div>
+                  </div>
+                  <div id="ds-performance-table" class="table-slot"></div>
+                </article>
+
+                <article class="panel-card">
+                  <div class="panel-card__header">
+                    <div>
+                      <h4>Confusion Matrices</h4>
+                      <p>Youden threshold only</p>
+                    </div>
+                  </div>
+                  <div id="ds-confusion-table" class="table-slot"></div>
+                </article>
+
+                <article class="panel-card">
+                  <div class="panel-card__header">
+                    <div>
+                      <h4>Stratified Performance</h4>
+                      <p>Selected subgroup</p>
+                    </div>
+                  </div>
+                  <div id="ds-stratified-table" class="table-slot"></div>
+                </article>
+
+                <article class="panel-card">
+                  <div class="panel-card__header">
+                    <div>
+                      <h4>DeLong Test Comparisons</h4>
+                      <p>Pairwise AUC comparisons</p>
+                    </div>
+                  </div>
+                  <div id="ds-delong-table" class="table-slot"></div>
+                </article>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="tab-panel" data-tab-panel="stratified">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Subgroup Performance</p>
+              <h3>Stratified Performance</h3>
+            </div>
+          </div>
+
+          <div class="content-grid">
+            <aside class="control-card">
+              <h4>Filters</h4>
+              <label class="field">
+                <span>Domain</span>
+                <select id="strat-domain"></select>
+              </label>
+              <fieldset class="field fieldset">
+                <legend>Model Type</legend>
+                <label><input type="radio" name="strat-model-type" value="Unimodal" checked> Unimodal</label>
+                <label><input type="radio" name="strat-model-type" value="Multimodal"> Multimodal</label>
+              </fieldset>
+              <label class="field">
+                <span>Stratification Group</span>
+                <select id="strat-stratum"></select>
+              </label>
+              <div class="button-stack">
+                <button id="strat-download-plot" class="primary-btn" type="button" data-plot-id="stratified-plot">Download Plot</button>
+                <button id="strat-download-data" class="secondary-btn" type="button">Download Data</button>
+              </div>
+            </aside>
+
+            <div class="content-column">
+              <article class="panel-card panel-card--chart">
+                <div class="panel-card__header">
+                  <div>
+                    <h4>Stratified AUC Performance</h4>
+                    <p>Current stratum</p>
+                  </div>
+                </div>
+                <div id="stratified-plot" class="plot-slot"></div>
+              </article>
+
+              <article class="panel-card">
+                <div class="panel-card__header">
+                  <div>
+                    <h4>Stratified Performance Table</h4>
+                    <p>Current domain and model type</p>
+                  </div>
+                </div>
+                <div id="stratified-table" class="table-slot"></div>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="tab-panel" data-tab-panel="auc-comparisons">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Inference</p>
+              <h3>AUC Comparisons</h3>
+            </div>
+          </div>
+
+          <div class="content-grid">
+            <aside class="control-card">
+              <h4>Filters</h4>
+              <label class="field">
+                <span>Domain</span>
+                <select id="delong-domain"></select>
+              </label>
+              <label class="field">
+                <span>Outcome</span>
+                <select id="delong-outcome"></select>
+              </label>
+              <fieldset class="field fieldset">
+                <legend>Model Type</legend>
+                <label><input type="radio" name="delong-model-type" value="Multimodal" checked> Multimodal</label>
+                <label><input type="radio" name="delong-model-type" value="Unimodal"> Unimodal</label>
+              </fieldset>
+              <label class="field field--inline">
+                <input id="delong-significant-only" type="checkbox">
+                <span>Show significant only (p &lt; 0.05)</span>
+              </label>
+              <div class="button-stack">
+                <button id="delong-download-data" class="secondary-btn" type="button">Download Data</button>
+              </div>
+            </aside>
+
+            <div class="content-column">
+              <article class="panel-card">
+                <div class="panel-card__header">
+                  <div>
+                    <h4>Pairwise AUC Comparison Results</h4>
+                    <p>Current domain, outcome, and model type</p>
+                  </div>
+                </div>
+                <div id="delong-table" class="table-slot"></div>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="tab-panel" data-tab-panel="confusion">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Thresholded Results</p>
+              <h3>Confusion Matrices</h3>
+            </div>
+          </div>
+
+          <div class="content-grid">
+            <aside class="control-card">
+              <h4>Filters</h4>
+              <label class="field">
+                <span>Domain</span>
+                <select id="cm-domain"></select>
+              </label>
+              <label class="field">
+                <span>Outcome</span>
+                <select id="cm-outcome"></select>
+              </label>
+              <fieldset class="field fieldset">
+                <legend>Model Type</legend>
+                <label><input type="radio" name="cm-model-type" value="Unimodal" checked> Unimodal</label>
+                <label><input type="radio" name="cm-model-type" value="Multimodal"> Multimodal</label>
+              </fieldset>
+              <label class="field">
+                <span>Threshold Type</span>
+                <select id="cm-threshold"></select>
+              </label>
+              <div class="button-stack">
+                <button id="cm-download-data" class="secondary-btn" type="button">Download Data</button>
+                <button id="cm-download-plot" class="primary-btn" type="button" data-plot-id="confusion-plot">Download Plot</button>
+              </div>
+            </aside>
+
+            <div class="content-column">
+              <article class="panel-card">
+                <div class="panel-card__header">
+                  <div>
+                    <h4>Confusion Matrix Metrics</h4>
+                    <p>Current selection</p>
+                  </div>
+                </div>
+                <div id="confusion-table" class="table-slot"></div>
+              </article>
+
+              <article class="panel-card panel-card--chart">
+                <div class="panel-card__header">
+                  <div>
+                    <h4>Sensitivity vs Specificity</h4>
+                    <p>Visual comparison across models</p>
+                  </div>
+                </div>
+                <div id="confusion-plot" class="plot-slot"></div>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="tab-panel" data-tab-panel="threshold">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Interactive Thresholding</p>
+              <h3>Threshold Explorer</h3>
+              <p class="section-copy">Adjust the threshold and inspect the resulting operating point in real time.</p>
+            </div>
+          </div>
+
+          <div class="panel-grid">
+            <article class="panel-card">
+              <div class="panel-card__header">
+                <div>
+                  <h4>Settings</h4>
+                  <p>Domain, outcome, model, and threshold selection</p>
+                </div>
+              </div>
+              <div class="settings-grid">
+                <label class="field">
+                  <span>Domain</span>
+                  <select id="te-domain"></select>
+                </label>
+                <label class="field">
+                  <span>Outcome</span>
+                  <select id="te-outcome"></select>
+                </label>
+                <label class="field">
+                  <span>Model</span>
+                  <select id="te-model"></select>
+                </label>
+                <label class="field">
+                  <span>Probability Threshold <strong id="te-threshold-display">0.5000</strong></span>
+                  <input id="te-threshold" type="range" min="0" max="1" step="0.0001" value="0.5">
+                </label>
+              </div>
+              <div class="button-row">
+                <button id="te-youden" class="secondary-btn secondary-btn--small" type="button">Youden</button>
+                <button id="te-spec90" class="secondary-btn secondary-btn--small" type="button">90% Spec</button>
+                <button id="te-spec95" class="secondary-btn secondary-btn--small" type="button">95% Spec</button>
+                <button id="te-spec99" class="secondary-btn secondary-btn--small" type="button">99% Spec</button>
+              </div>
+            </article>
+
+            <article class="panel-card">
+              <div class="panel-card__header">
+                <div>
+                  <h4>Confusion Matrix at Selected Threshold</h4>
+                  <p>Counts derived from the nearest ROC point</p>
+                </div>
+              </div>
+              <div class="threshold-box-grid">
+                <article class="threshold-box threshold-box--green">
+                  <span>True Positives</span>
+                  <strong id="te-tp">-</strong>
+                </article>
+                <article class="threshold-box threshold-box--red">
+                  <span>False Positives</span>
+                  <strong id="te-fp">-</strong>
+                </article>
+                <article class="threshold-box threshold-box--orange">
+                  <span>False Negatives</span>
+                  <strong id="te-fn">-</strong>
+                </article>
+                <article class="threshold-box threshold-box--blue">
+                  <span>True Negatives</span>
+                  <strong id="te-tn">-</strong>
+                </article>
+              </div>
+            </article>
+
+            <article class="panel-card">
+              <div class="panel-card__header">
+                <div>
+                  <h4>Performance Metrics</h4>
+                  <p>Nearest threshold operating point</p>
+                </div>
+              </div>
+              <div id="te-metrics-table" class="table-slot"></div>
+            </article>
+
+            <article class="panel-card panel-card--chart">
+              <div class="panel-card__header">
+                <div>
+                  <h4>ROC Curve with Current Threshold</h4>
+                  <p>Selected operating point highlighted</p>
+                </div>
+                <button id="te-download-roc-plot" class="ghost-btn" type="button" data-plot-id="te-roc-plot">Download Plot</button>
+              </div>
+              <div id="te-roc-plot" class="plot-slot"></div>
+            </article>
+
+            <article class="panel-card panel-card--chart">
+              <div class="panel-card__header">
+                <div>
+                  <h4>Sensitivity-Specificity Trade-off</h4>
+                  <p>Threshold sweep for the selected model</p>
+                </div>
+                <button id="te-download-tradeoff-plot" class="ghost-btn" type="button" data-plot-id="te-tradeoff-plot">Download Plot</button>
+              </div>
+              <div id="te-tradeoff-plot" class="plot-slot"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="tab-panel" data-tab-panel="baseline">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Project 3008 Reference</p>
+              <h3>Baseline Comparison</h3>
+            </div>
+          </div>
+
+          <article class="panel-card">
+            <div class="panel-card__header">
+              <div>
+                <h4>Performance Comparison: Project 3008 Baseline vs Topcon Refresh</h4>
+                <p>This compares the December 10, 2025 project 3008 results with the March 27, 2026 Topcon refresh results.</p>
+              </div>
+              <button id="baseline-download-data" class="ghost-btn" type="button">Download</button>
+            </div>
+            <div id="baseline-table" class="table-slot"></div>
+          </article>
+        </section>
+
+        <section class="tab-panel" data-tab-panel="about">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Context</p>
+              <h3>About</h3>
+            </div>
+          </div>
+
+          <div class="panel-grid">
+            <article class="panel-card">
+              <div class="panel-card__header">
+                <div>
+                  <h4>About This Application</h4>
+                  <p>Static GitHub Pages recreation</p>
+                </div>
+              </div>
+              <div class="prose-block">
+                <h5>CDC Topcon Models - Comprehensive Results Explorer</h5>
+                <p>
+                  This GitHub Pages application provides interactive exploration
+                  of the March 27, 2026 Topcon refresh glaucoma model results
+                  without requiring a Shiny server.
+                </p>
+
+                <h5>Key Features</h5>
+                <ul>
+                  <li>Summary dashboard with top-performing model snapshots.</li>
+                  <li>Interactive ROC curves, forest plots, and threshold explorer views.</li>
+                  <li>Downloadable tables and filtered CSV exports.</li>
+                  <li>Client-side rendering from precomputed analysis outputs only.</li>
+                </ul>
+
+                <h5>Models Evaluated</h5>
+                <ul>
+                  <li>Unimodal: Fundus</li>
+                  <li>Multimodal: RNFL+Circle, RNFL+Circle+Fundus</li>
+                </ul>
+
+                <h5>Outcomes Analyzed</h5>
+                <ul>
+                  <li>Glaucoma+Suspect vs Healthy (training definition)</li>
+                  <li>Glaucoma vs Suspect+Healthy (stricter definition)</li>
+                </ul>
+              </div>
+            </article>
+
+            <article class="panel-card">
+              <div class="panel-card__header">
+                <div>
+                  <h4>Data Sources</h4>
+                  <p>Current site metadata</p>
+                </div>
+              </div>
+              <div class="stat-stack">
+                <div class="stat-item">
+                  <span>Cohorts</span>
+                  <strong>AL-SIGHT: UAB</strong>
+                  <small>Hood: Columbia University</small>
+                </div>
+                <div class="stat-item">
+                  <span>Reference</span>
+                  <strong>Project 3008 CDC baseline evaluation</strong>
+                  <small>December 10, 2025</small>
+                </div>
+                <div class="stat-item">
+                  <span>Contact</span>
+                  <strong>Statistician: Shahin Hallaj, MD</strong>
+                  <small>shallaj@health.ucsd.edu</small>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/plotly.js-dist-min@2.35.2/plotly.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tabulator-tables@6.2.5/dist/js/tabulator.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

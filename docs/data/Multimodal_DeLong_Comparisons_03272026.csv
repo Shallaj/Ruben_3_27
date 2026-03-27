@@ -1,0 +1,3 @@
+"Outcome","Model1","Model2","AUC1","AUC2","AUC_Diff","P_Value","Significant","Method"
+"Glaucoma+Suspect vs Healthy","RNFL+Circle","RNFL+Circle+Fundus",0.938,0.939,-0.002,0.572,"No","cluster_bootstrap"
+"Glaucoma vs Suspect+Healthy","RNFL+Circle","RNFL+Circle+Fundus",0.914,0.905,0.009,0.092,"No","cluster_bootstrap"

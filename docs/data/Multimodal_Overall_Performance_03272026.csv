@@ -1,0 +1,5 @@
+"Model_Type","N_Modalities","Outcome","Model","N","N_Cases","N_Controls","AUC","AUC_CI_Lower","AUC_CI_Upper","AUC_Formatted","AUPRC","Sens_80Spec","Sens_85Spec","Sens_90Spec","Sens_95Spec","Sens_99Spec","Youden_Threshold","Youden_Sensitivity","Youden_Specificity"
+"Multimodal",2,"Glaucoma+Suspect vs Healthy","RNFL+Circle",1604,369,1235,0.937583796890611,0.919247661064647,0.953661548856272,"0.938 (0.919, 0.954)",0.85,0.919,0.87,0.827,0.721,0.428,0.3678,0.862,0.872
+"Multimodal",3,"Glaucoma+Suspect vs Healthy","RNFL+Circle+Fundus",1604,369,1235,0.939299781661794,0.921692273901904,0.955181746867229,"0.939 (0.922, 0.955)",0.856,0.916,0.892,0.84,0.732,0.442,0.3113,0.881,0.872
+"Multimodal",2,"Glaucoma vs Suspect+Healthy","RNFL+Circle",974,49,925,0.913756205184771,0.839446352506964,0.978010295169085,"0.914 (0.839, 0.978)",0.465,0.837,0.776,0.735,0.612,0.327,0.3728,0.878,0.794
+"Multimodal",3,"Glaucoma vs Suspect+Healthy","RNFL+Circle+Fundus",974,49,925,0.904732487589626,0.831322004875369,0.970314280732523,"0.905 (0.831, 0.970)",0.493,0.776,0.776,0.673,0.551,0.429,0.2682,0.959,0.69

@@ -1,0 +1,4 @@
+Domain,Model_Type,Outcome,Model1,Model2,AUC1,AUC2,AUC_Diff,P_Value,Significant,Method
+AL-SIGHT,Multimodal,Glaucoma+Suspect vs Healthy,RNFL+Circle,RNFL+Circle+Fundus,0.8415,0.8423,-8e-4,0.884,No,cluster_bootstrap
+AL-SIGHT,Multimodal,Glaucoma vs Suspect+Healthy,RNFL+Circle,RNFL+Circle+Fundus,0.9138,0.9047,0.009,0.104,No,cluster_bootstrap
+Hood,Multimodal,Glaucoma+Suspect vs Healthy,RNFL+Circle,RNFL+Circle+Fundus,0.9935,0.9946,-0.0011,0.3604,No,delong

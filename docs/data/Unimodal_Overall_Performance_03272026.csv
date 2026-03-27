@@ -1,0 +1,3 @@
+"Model_Type","Outcome","Model","N","N_Cases","N_Controls","AUC","AUC_CI_Lower","AUC_CI_Upper","AUC_Formatted","AUPRC","Sens_80Spec","Sens_85Spec","Sens_90Spec","Sens_95Spec","Sens_99Spec","Youden_Threshold","Youden_Sensitivity","Youden_Specificity"
+"Unimodal","Glaucoma+Suspect vs Healthy","Fundus",1604,369,1235,0.75931887254095,0.717031908593019,0.792778508799942,"0.759 (0.717, 0.793)",0.522,0.558,0.482,0.388,0.287,0.119,0.2997,0.737,0.652
+"Unimodal","Glaucoma vs Suspect+Healthy","Fundus",974,49,925,0.692553778268063,0.514010801907469,0.850563696552363,"0.693 (0.514, 0.851)",0.206,0.551,0.531,0.388,0.265,0.184,0.357,0.551,0.85
